@@ -35,14 +35,14 @@ public class BedrockWhitelistCommand {
                     .then(
                         Commands.literal("add")
                             .then(
-                                Commands.argument("gamertag", StringArgumentType.word())
+                                Commands.argument("gamertag", StringArgumentType.greedyString())
                                     .executes(context -> addPlayerToWhitelist(context))
                             )
                     )
                     .then(
                         Commands.literal("remove")
                             .then(
-                                Commands.argument("gamertag", StringArgumentType.word())
+                                Commands.argument("gamertag", StringArgumentType.greedyString())
                                     .executes(context -> removePlayerFromWhitelist(context))
                                 )
                     )
@@ -56,7 +56,9 @@ public class BedrockWhitelistCommand {
         String passedUsername = StringArgumentType.getString(
         context,
         "gamertag"
-        ).replaceFirst("\\.", "");
+        )
+        .replaceFirst("\\.", "")
+        ;
 
     UserWhiteList whitelist = context
         .getSource()
@@ -147,7 +149,7 @@ public class BedrockWhitelistCommand {
     
 
     private static UserWhiteListEntry getWhitelistEntry(String passedUsername) throws Exception {
-        String xboxProfileEndpoint = "https://api.rghlab.co.uk/xuid?gamertag=" + passedUsername;
+        String xboxProfileEndpoint = "https://api.rghlab.co.uk/xuid?gamertag=" + passedUsername.replaceAll(" ", "%20");
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
