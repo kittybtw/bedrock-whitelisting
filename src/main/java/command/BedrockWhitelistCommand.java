@@ -35,14 +35,14 @@ public class BedrockWhitelistCommand {
                     .then(
                         Commands.literal("add")
                             .then(
-                                Commands.argument("gamertag", StringArgumentType.word())
+                                Commands.argument("gamertag", StringArgumentType.greedyString())
                                     .executes(context -> addPlayerToWhitelist(context))
                             )
                     )
                     .then(
                         Commands.literal("remove")
                             .then(
-                                Commands.argument("gamertag", StringArgumentType.word())
+                                Commands.argument("gamertag", StringArgumentType.greedyString())
                                     .executes(context -> removePlayerFromWhitelist(context))
                                 )
                     )
@@ -56,7 +56,10 @@ public class BedrockWhitelistCommand {
         String passedUsername = StringArgumentType.getString(
         context,
         "gamertag"
-        ).replaceFirst("\\.", "");
+        )
+        .replaceFirst("\\.", "")
+        .replaceFirst
+        ;
 
     UserWhiteList whitelist = context
         .getSource()
