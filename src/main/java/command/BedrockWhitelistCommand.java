@@ -58,7 +58,6 @@ public class BedrockWhitelistCommand {
         "gamertag"
         )
         .replaceFirst("\\.", "")
-        .replaceFirst
         ;
 
     UserWhiteList whitelist = context
