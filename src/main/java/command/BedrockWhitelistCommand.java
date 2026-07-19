@@ -149,7 +149,7 @@ public class BedrockWhitelistCommand {
     
 
     private static UserWhiteListEntry getWhitelistEntry(String passedUsername) throws Exception {
-        String xboxProfileEndpoint = "https://api.rghlab.co.uk/xuid?gamertag=" + passedUsername;
+        String xboxProfileEndpoint = "https://api.rghlab.co.uk/xuid?gamertag=" + passedUsername.replaceAll(" ", "%20");
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
