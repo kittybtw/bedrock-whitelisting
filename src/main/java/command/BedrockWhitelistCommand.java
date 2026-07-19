@@ -46,6 +46,10 @@ public class BedrockWhitelistCommand {
                                     .executes(context -> removePlayerFromWhitelist(context))
                                 )
                     )
+                    .then(
+                        Commands.literal("list")
+                            .executes(context -> listWhitelistedBedrockPlayers(context))
+                    )
                 );
             
             });
@@ -56,15 +60,9 @@ public class BedrockWhitelistCommand {
         String passedUsername = StringArgumentType.getString(
         context,
         "gamertag"
-        )
-        .replaceFirst("\\.", "")
-        ;
+        ).replaceFirst("\\.", "");
 
-    UserWhiteList whitelist = context
-        .getSource()
-        .getServer()
-        .getPlayerList()
-        .getWhiteList();
+    UserWhiteList whitelist = getWhitelistFromContext(context);
 
     CompletableFuture<UserWhiteListEntry> futureWhitelistEntry = CompletableFuture.supplyAsync(() -> {
         try {
@@ -107,11 +105,7 @@ public class BedrockWhitelistCommand {
         "gamertag"
         ).replaceFirst("\\.", "");
 
-        UserWhiteList whitelist = context
-        .getSource()
-        .getServer()
-        .getPlayerList()
-        .getWhiteList();
+        UserWhiteList whitelist = getWhitelistFromContext(context);
 
         CompletableFuture<UserWhiteListEntry> futureWhitelistEntry = CompletableFuture.supplyAsync(() -> {
             try {
@@ -145,8 +139,14 @@ public class BedrockWhitelistCommand {
         });
 
         return Command.SINGLE_SUCCESS;
-    };
+    }
     
+
+    private static int listWhitelistedBedrockPlayers(CommandContext<CommandSourceStack> context) {
+        
+        return Command.SINGLE_SUCCESS;
+    }
+
 
     private static UserWhiteListEntry getWhitelistEntry(String passedUsername) throws Exception {
         String xboxProfileEndpoint = "https://api.rghlab.co.uk/xuid?gamertag=" + passedUsername.replaceAll(" ", "%20");
@@ -194,11 +194,7 @@ public class BedrockWhitelistCommand {
 
 
     private static void saveWhitelist(CommandContext<CommandSourceStack> context) {
-        UserWhiteList whitelist = context
-        .getSource()
-        .getServer()
-        .getPlayerList()
-        .getWhiteList();
+        UserWhiteList whitelist = getWhitelistFromContext(context);
 
         try {
             whitelist.save();
@@ -207,5 +203,12 @@ public class BedrockWhitelistCommand {
                 Component.literal("Failed to save the whitelist: " + e.getMessage())
             );
         }
+    }
+
+
+    private static UserWhiteList getWhitelistFromContext(CommandContext<CommandSourceStack> context) {
+        UserWhiteList whitelist = context.getSource().getServer().getPlayerList().getWhiteList();
+
+        return whitelist;
     }
 }
